@@ -112,7 +112,7 @@ export default function FeaturedTrainers() {
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center"
+          className="text-center mb-25"
         >
           <h2 className="font-anton text-white text-5xl md:text-7xl mb-4 leading-tight">
             Top-Rated <span className="text-lime-400">Trainers</span>
