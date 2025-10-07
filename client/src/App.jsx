@@ -3,6 +3,9 @@ import Hero from '../sections/Hero';
 import Navbar from '../components/Navbar';
 import Categories from '../sections/Categories';
 import Featured from '../sections/Featured';
+import Why from '../sections/Why';
+import Testimonials from '../sections/Testimonials';
+import Footer from '../components/Footer';
 
 export default function FitFusionHero() {
   return (
@@ -18,6 +21,15 @@ export default function FitFusionHero() {
 
       {/* Featured Section */}
       <Featured />
+
+      {/* Why Choose Us Section */}
+      <Why />
+      
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
