@@ -49,31 +49,98 @@ export default function Testimonials() {
   const visible = getVisibleIndices();
 
   return (
-    <div className="relative bg-black py-20 overflow-hidden">
+    <div className="relative bg-black py-12 md:py-20 overflow-hidden">
       {/* Background Gradient Blobs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-lime-500/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lime-500/5 rounded-full blur-3xl"></div>
 
-      <div className="relative z-10 w-full px-6">
+      <div className="relative z-10 w-full px-4 md:px-6">
         {/* Header */}
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16 max-w-7xl mx-auto"
+          className="text-center mb-12 md:mb-16 max-w-7xl mx-auto"
         >
-          <h2 className="font-anton text-white text-5xl md:text-7xl mb-2 leading-tight">
+          <h2 className="font-anton text-white text-4xl md:text-5xl lg:text-7xl mb-2 leading-tight">
             Your Success Stories,{' '}
             <span className="text-lime-400">Our Inspiration</span>
           </h2>
-          <p className="font-roboto text-gray-400 text-lg md:text-xl mt-4">
+          <p className="font-roboto text-gray-400 text-base md:text-lg lg:text-xl mt-4 px-4">
             See How Our Customers Have Achieved Their Goals And Let Their Journeys Inspire Yours!
           </p>
         </motion.div>
 
-        {/* Testimonials Section */}
-        <div className="relative w-full max-w-7xl mx-auto">
+        {/* Testimonials Section - Mobile Layout */}
+        <div className="relative w-full max-w-7xl mx-auto md:hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`mobile-${activeIndex}`}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center gap-6"
+            >
+              {/* Image */}
+              <div className="relative w-full max-w-sm">
+                <img
+                  src={testimonials[activeIndex].image}
+                  alt={testimonials[activeIndex].name}
+                  className="w-full h-auto object-cover grayscale rounded-lg"
+                />
+              </div>
+
+              {/* Quote Card */}
+              <div className="bg-zinc-900/95 backdrop-blur-md border border-zinc-800 rounded-2xl p-6 shadow-2xl w-full max-w-sm">
+                {/* Testimonial Text */}
+                <p className="font-roboto text-gray-300 text-base leading-relaxed mb-6">
+                  "{testimonials[activeIndex].text}"
+                </p>
+                
+                {/* Profile Section */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bebas text-white text-xl tracking-wide">
+                      - {testimonials[activeIndex].name}
+                    </h4>
+                    <p className="font-roboto text-gray-400 text-sm">
+                      {testimonials[activeIndex].location}
+                    </p>
+                  </div>
+                  
+                  {/* Rating Stars */}
+                  <div className="flex gap-1">
+                    {[...Array(testimonials[activeIndex].rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-lime-400 text-lime-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation Buttons - Mobile */}
+          <div className="flex justify-center gap-4 mt-8">
+            <button
+              onClick={prevTestimonial}
+              className="w-12 h-12 rounded-full border-2 border-gray-700 bg-black/50 backdrop-blur-sm flex items-center justify-center hover:border-lime-400 hover:bg-lime-400/10 transition-all duration-300 group"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-400 group-hover:text-lime-400" />
+            </button>
+
+            <button
+              onClick={nextTestimonial}
+              className="w-12 h-12 rounded-full border-2 border-gray-700 bg-black/50 backdrop-blur-sm flex items-center justify-center hover:border-lime-400 hover:bg-lime-400/10 transition-all duration-300 group"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-lime-400" />
+            </button>
+          </div>
+        </div>
+
+        {/* Testimonials Section - Desktop Layout */}
+        <div className="relative w-full max-w-7xl mx-auto hidden md:block">
           <div className="relative flex items-center justify-between gap-8">
             {/* Left Side - Main Featured Image */}
             <div className="relative flex-shrink-0">
@@ -183,7 +250,7 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - Desktop */}
           <div className="absolute left-1/2 transform -translate-x-1/2 top-12 flex gap-4 z-30">
             <button
               onClick={prevTestimonial}
@@ -207,7 +274,7 @@ export default function Testimonials() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.8 }}
-          className="flex justify-center gap-2 mt-16"
+          className="flex justify-center gap-2 mt-12 md:mt-16"
         >
           {testimonials.map((_, index) => (
             <button

@@ -62,7 +62,7 @@ export default function Hero() {
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="group px-8 py-4 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all flex items-center gap-2 text-lg"
+            className="group px-8 py-4 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all flex items-center gap-2 text-lg w-full sm:w-auto"
           >
             Browse Trainers
           </motion.button>
@@ -70,7 +70,7 @@ export default function Hero() {
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 px-8 py-4 text-white border-2 border-white rounded-full hover:bg-white hover:text-black transition-all font-bold text-lg"
+            className="px-8 py-4 text-white border-2 border-white rounded-full hover:bg-white hover:text-black transition-all font-bold text-lg flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             Get Matched Instantly
             <motion.span 
@@ -89,7 +89,7 @@ export default function Hero() {
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
-        className="font-bebas absolute bottom-8 left-8 z-20 flex items-center gap-4"
+        className="font-bebas absolute bottom-8 left-4 sm:left-8 z-20 flex items-center gap-4"
       >
         <div className="flex -space-x-3">
           <motion.img
@@ -98,7 +98,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 1 }}
             src="https://i.pravatar.cc/48?img=1"
             alt="Member"
-            className="w-12 h-12 rounded-full border-2 border-black"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-black"
           />
           <motion.img
             initial={{ scale: 0 }}
@@ -106,7 +106,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 1.1 }}
             src="https://i.pravatar.cc/48?img=2"
             alt="Member"
-            className="w-12 h-12 rounded-full border-2 border-black"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-black"
           />
           <motion.img
             initial={{ scale: 0 }}
@@ -114,7 +114,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 1.2 }}
             src="https://i.pravatar.cc/48?img=3"
             alt="Member"
-            className="w-12 h-12 rounded-full border-2 border-black"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-black"
           />
         </div>
         <motion.div 
@@ -123,8 +123,8 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 1.3 }}
           className="text-white"
         >
-          <p className="text-3xl md:text-4xl font-bold">100+</p>
-          <p className="text-sm text-gray-600">Happy Spirits</p>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold">100+</p>
+          <p className="text-xs sm:text-sm text-gray-600">Happy Spirits</p>
         </motion.div>
       </motion.div>
 
@@ -133,12 +133,12 @@ export default function Hero() {
         initial={{ x: 100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
-        className="font-montserrat absolute bottom-8 right-8 z-20 flex items-center gap-4"
+        className="font-montserrat absolute bottom-8 right-4 sm:right-8 z-20 flex items-center gap-4"
       >
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group px-8 py-4 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all flex items-center gap-2 text-lg"
+          className="group px-6 sm:px-8 py-3 sm:py-4 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all flex items-center gap-2 text-base sm:text-lg"
         >
           Let's Start
           <motion.span 
