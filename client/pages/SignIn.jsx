@@ -16,7 +16,7 @@ export default function LoginPage() {
     <div className="relative h-screen w-full overflow-hidden">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
-        <video
+        {/* <video
           autoPlay
           loop
           muted
@@ -27,9 +27,15 @@ export default function LoginPage() {
             src="video.mp4"
             type="video/mp4"
           />
-        </video>
+        </video> */}
+
+        <img
+          src="sign_bg.jpg"
+          alt="Background"
+          className="w-full h-full object-cover"
+        />
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/60"></div>
       </div>
 
       {/* Logo - Top Left */}
@@ -41,7 +47,10 @@ export default function LoginPage() {
       >
         <Dumbbell className="w-7 h-7 text-lime-400" />
         <a href="/">
-        <span className="text-white font-bebas text-2xl tracking-wider">FITIN</span></a>
+          <span className="text-white font-bebas text-2xl tracking-wider">
+            FITIN
+          </span>
+        </a>
       </motion.div>
 
       {/* Login Card - Centered */}
@@ -120,7 +129,7 @@ export default function LoginPage() {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -150,10 +159,11 @@ export default function LoginPage() {
 
             {/* Footer Links */}
             <div className="flex items-center justify-between text-sm">
-              <a href='/signup'>  
-              <button className="font-roboto text-lime-400 hover:text-lime-300 transition-colors cursor-pointer">
-                Create an account
-              </button></a>
+              <a href="/signup">
+                <button className="font-roboto text-lime-400 hover:text-lime-300 transition-colors cursor-pointer">
+                  Create an account
+                </button>
+              </a>
               <button className="font-roboto text-lime-400 hover:text-lime-300 transition-colors">
                 Forgot password?
               </button>
