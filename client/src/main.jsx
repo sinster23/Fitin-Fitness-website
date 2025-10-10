@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from '../pages/SignUp.jsx';
 import SignIn from '../pages/SignIn.jsx';
 import Contact from '../pages/Contact.jsx';
+import VerifyEmail from '../pages/VerifyEmail.jsx';
+import AuthSuccess from '../pages/AuthSuccess.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -29,13 +31,19 @@ createRoot(document.getElementById('root')).render(
           } 
         />
 
-        {/* About page */}
+        {/* Contact page */}
         <Route 
           path="/contact" 
           element={
               <Contact />
           } 
         />
+
+          {/* Verification page */}
+        <Route path="/auth/success" element={<AuthSuccess />} />
+
+        {/* Email Verification page */}
+        <Route path="/verify/:token" element={<VerifyEmail />} /> 
       </Routes>  
     </BrowserRouter>      
   </StrictMode>,

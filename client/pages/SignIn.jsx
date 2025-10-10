@@ -1,34 +1,97 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Dumbbell, Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Dumbbell, Eye, EyeOff, Mail, Lock, AlertCircle, X } from 'lucide-react';
+import VerificationPage from '../components/VerificationPage';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [resendingVerification, setResendingVerification] = useState(false);
 
-  const handleSubmit = (e) => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login:', { email, password });
+    setError('');
+
+    if (!email || !password) {
+      setError('Please fill in all the required fields.');
+      return;
+    }
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store token in memory instead of localStorage
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('user', JSON.stringify(data));
+        
+        // Redirect to dashboard or home
+        window.location.href = '/';
+      } else {
+        // Check if error is about email verification
+        if (data.message.toLowerCase().includes('not verified') || 
+            data.message.toLowerCase().includes('verify')) {
+          setShowVerificationModal(true);
+        } else {
+          setError(data.message || 'Invalid credentials');
+        }
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setResendingVerification(true);
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/auth/resend-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setShowVerificationModal(false);
+      } else {
+        setError(data.message || 'Failed to resend verification email');
+        setShowVerificationModal(false);
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      setShowVerificationModal(false);
+      console.error('Resend verification error:', err);
+    } finally {
+      setResendingVerification(false);
+    }
   };
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
-        {/* <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        >
-          <source
-            src="video.mp4"
-            type="video/mp4"
-          />
-        </video> */}
-
         <img
           src="sign_bg.jpg"
           alt="Background"
@@ -69,9 +132,22 @@ export default function LoginPage() {
             </p>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-5 bg-red-500/20 border border-red-500/50 rounded-lg p-3 flex items-start gap-3"
+            >
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+              <p className="font-roboto text-red-300 text-sm">{error}</p>
+            </motion.div>
+          )}
+
           {/* Form */}
           <div className="space-y-5">
             {/* Google Sign In */}
+            <a className='cursor-pointer flex justify-center items-center' href={`${BACKEND_URL}/api/auth/google`}>
             <button
               type="button"
               className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-roboto py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-3 border border-lime-400/40 hover:border-lime-400"
@@ -96,6 +172,7 @@ export default function LoginPage() {
               </svg>
               <span>Sign in with Google</span>
             </button>
+            </a>
 
             {/* Divider */}
             <div className="flex items-center gap-4">
@@ -116,6 +193,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
+                  required
                   className="w-full bg-zinc-800/60 text-white font-roboto py-3 pl-12 pr-4 rounded-lg border border-zinc-700 focus:border-lime-400 focus:outline-none transition-all duration-300 placeholder:text-gray-500"
                 />
               </div>
@@ -133,6 +211,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
+                  required
                   className="w-full bg-zinc-800/60 text-white font-roboto py-3 pl-12 pr-12 rounded-lg border border-zinc-700 focus:border-lime-400 focus:outline-none transition-all duration-300 placeholder:text-gray-500"
                 />
                 <button
@@ -152,25 +231,92 @@ export default function LoginPage() {
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="w-full bg-lime-400 hover:bg-lime-500 text-black font-roboto font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02]"
+              disabled={loading}
+              className="w-full bg-lime-400 hover:bg-lime-500 text-black font-roboto font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              Log In
+              {loading ? 'Logging in...' : 'Log In'}
             </button>
 
             {/* Footer Links */}
             <div className="flex items-center justify-between text-sm">
               <a href="/signup">
-                <button className="font-roboto text-lime-400 hover:text-lime-300 transition-colors cursor-pointer">
+                <button type="button" className="font-roboto text-lime-400 hover:text-lime-300 transition-colors cursor-pointer">
                   Create an account
                 </button>
               </a>
-              <button className="font-roboto text-lime-400 hover:text-lime-300 transition-colors">
+              <button type="button" className="font-roboto text-lime-400 hover:text-lime-300 transition-colors">
                 Forgot password?
               </button>
             </div>
           </div>
         </motion.div>
       </div>
+
+      {/* Email Verification Modal */}
+      <AnimatePresence>
+        {showVerificationModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setShowVerificationModal(false)}
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-zinc-900 border border-lime-400/30 rounded-2xl p-8 max-w-md w-full shadow-2xl"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowVerificationModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Icon */}
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                  <AlertCircle className="w-8 h-8 text-yellow-400" />
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="text-center mb-6">
+                <h2 className="font-anton text-white text-2xl mb-3">
+                  Email Not Verified
+                </h2>
+                <p className="font-roboto text-gray-400 text-sm">
+                  Your email address is not verified. Please verify your email to continue.
+                </p>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={handleResendVerification}
+                disabled={resendingVerification}
+                className="w-full bg-lime-400 hover:bg-lime-500 text-black font-roboto font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {resendingVerification ? 'Sending...' : 'Verify Email Address'}
+              </button>
+
+              {/* Cancel Button */}
+              <button
+                onClick={() => setShowVerificationModal(false)}
+                className="w-full mt-3 bg-transparent hover:bg-zinc-800 text-gray-400 hover:text-white font-roboto py-3 px-4 rounded-lg transition-all duration-300"
+              >
+                Cancel
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

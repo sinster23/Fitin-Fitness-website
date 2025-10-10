@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Dumbbell, ChevronLeft, ChevronRight, Zap } from 'lucide-react';
+import { Dumbbell, ChevronLeft, ChevronRight, Zap, Mail, Loader2 } from 'lucide-react';
+import axios from 'axios';
+import VerificationPage from '../components/VerificationPage';
 
 export default function SignUpPage() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showVerificationPage, setShowVerificationPage] = useState(false);
+  const [error, setError] = useState('');
+
+  const BACKEND_URL =  import.meta.env.VITE_BACKEND_URL;
 
   const slides = [
     {
@@ -42,11 +50,44 @@ export default function SignUpPage() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Sign up:', { email, password, agreedToTerms });
+    setError('');
+    
+    if (!agreedToTerms) {
+      setError('Please agree to the Terms of use and Privacy Policy');
+      return;
+    }
+
+    if (!name || !email || !password) {
+      setError('Please fill in all the required fields.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/auth/register`, {
+        name,
+        email,
+        password
+      });
+
+      // Show verification page on success
+      setShowVerificationPage(true);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  // Email Verification Page
+  if (showVerificationPage) {
+    return <VerificationPage email={email} />;
+  }
+
+  // Sign Up Form Page
   return (
     <div className="h-screen bg-black flex overflow-hidden">
       {/* Left Side - Form */}
@@ -81,15 +122,26 @@ export default function SignUpPage() {
             className="mb-6"
           >
             <h1 className="font-anton text-white text-3xl md:text-4xl mb-2 leading-tight">
-              Train Smarter,
+              Find. Train. Achieve.
             </h1>
             <h2 className="font-anton text-lime-400 text-3xl md:text-4xl mb-3 leading-tight">
-              Get Matched with the Right Coach
+              Trainers Tailored for You
             </h2>
             <p className="font-roboto text-gray-400 text-sm">
               Welcome champ, please enter your details
             </p>
           </motion.div>
+
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg"
+            >
+              <p className="text-red-400 text-sm">{error}</p>
+            </motion.div>
+          )}
 
           {/* Form */}
           <motion.form
@@ -100,6 +152,7 @@ export default function SignUpPage() {
             className="space-y-4"
           >
             {/* Google Sign In */}
+            <a className='cursor-pointer flex items-center justify-center' href={`${BACKEND_URL}/api/auth/google`}>
             <button
               type="button"
               className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-roboto py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-3 border border-zinc-800 hover:border-lime-400/30"
@@ -124,12 +177,27 @@ export default function SignUpPage() {
               </svg>
               <span>Continue with Google</span>
             </button>
+            </a>
 
             {/* Divider */}
             <div className="flex items-center gap-4">
               <div className="flex-1 h-px bg-zinc-800"></div>
               <span className="font-roboto text-gray-500 text-sm">or</span>
               <div className="flex-1 h-px bg-zinc-800"></div>
+            </div>
+
+            <div>
+              <label className="font-roboto text-gray-400 text-xs mb-1.5 block">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-zinc-900 text-white font-roboto py-2.5 px-4 rounded-lg border border-zinc-800 focus:border-lime-400 focus:outline-none transition-all duration-300"
+                required
+                disabled={isLoading}
+              />
             </div>
 
             {/* Email Input */}
@@ -143,6 +211,7 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-zinc-900 text-white font-roboto py-2.5 px-4 rounded-lg border border-zinc-800 focus:border-lime-400 focus:outline-none transition-all duration-300"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -157,6 +226,7 @@ export default function SignUpPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-zinc-900 text-white font-roboto py-2.5 px-4 rounded-lg border border-zinc-800 focus:border-lime-400 focus:outline-none transition-all duration-300"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -168,6 +238,7 @@ export default function SignUpPage() {
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
                 className="mt-0.5 w-4 h-4 accent-lime-400"
+                disabled={isLoading}
               />
               <label
                 htmlFor="terms"
@@ -187,12 +258,20 @@ export default function SignUpPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-lime-400 hover:bg-lime-500 text-black font-roboto font-bold py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02]"
+              disabled={isLoading}
+              className="w-full bg-lime-400 hover:bg-lime-500 text-black font-roboto font-bold py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
             >
-              Create Account
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                'Create Account'
+              )}
             </button>
 
-            {/* Sign Up Link */}
+            {/* Sign In Link */}
             <p className="font-roboto text-gray-400 text-sm text-center">
               Already have an account?{" "}
               <a href='/signin'>
