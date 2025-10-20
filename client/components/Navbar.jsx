@@ -118,11 +118,6 @@ export default function Navbar() {
             ) : (
               // Not logged in view
               <>
-                <a href="/signin">
-                  <button className="hidden md:block px-6 py-2 text-lime-400 border border-lime-400 rounded-full hover:bg-lime-400/10 transition-all">
-                    Sign In
-                  </button>
-                </a>
                 <a href="/signup">
                   <button className="px-6 py-2 bg-lime-400 text-black font-semibold rounded-full hover:bg-lime-500 transition-all">
                     Get Started

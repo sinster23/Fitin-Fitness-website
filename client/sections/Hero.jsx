@@ -135,20 +135,6 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.8 }}
         className="font-montserrat absolute bottom-8 right-4 sm:right-8 z-20 flex items-center gap-4"
       >
-        <motion.button 
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="group px-6 sm:px-8 py-3 sm:py-4 bg-lime-400 text-black font-bold rounded-full hover:bg-lime-500 transition-all flex items-center gap-2 text-base sm:text-lg"
-        >
-          Let's Start
-          <motion.span 
-            whileHover={{ x: 8 }}
-            transition={{ duration: 0.3 }}
-            className="transition-transform duration-300 group-hover:translate-x-2"
-          >
-            &gt;&gt;&gt;
-          </motion.span>
-        </motion.button>
       </motion.div>
     </motion.div>
   );

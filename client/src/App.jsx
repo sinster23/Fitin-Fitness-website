@@ -6,6 +6,8 @@ import Featured from '../sections/Featured';
 import Why from '../sections/Why';
 import Testimonials from '../sections/Testimonials';
 import Footer from '../components/Footer';
+import Works from '../sections/Works';
+import AboutUs from '../sections/About';
 
 export default function FitFusionHero() {
   return (
@@ -16,8 +18,14 @@ export default function FitFusionHero() {
       {/* Hero Section */}
       <Hero />
 
+      {/* How It Works Section */}
+      <Works />
+
       {/* Categories Section */}
       <Categories />
+
+      {/* About Us Section */}
+      <AboutUs />
 
       {/* Featured Section */}
       <Featured />
