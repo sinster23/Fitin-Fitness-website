@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Target, Users, Dumbbell } from 'lucide-react';
 
 export default function HowItWorks() {
+  const [activeIndex, setActiveIndex] = useState(1);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
   const steps = [
     {
       step: "01",
@@ -33,6 +36,30 @@ export default function HowItWorks() {
     }
   ];
 
+  const getCardPosition = (index) => {
+    const isActive = index === (hoveredIndex !== null ? hoveredIndex : activeIndex);
+    
+    if (index === 0) {
+      return {
+        transform: 'translateX(-410px) scale(' + (isActive ? '1' : '0.85') + ')',
+        opacity: isActive ? 1 : 0.6,
+        zIndex: isActive ? 3 : 1
+      };
+    } else if (index === 1) {
+      return {
+        transform: 'translateX(0) scale(' + (isActive ? '1' : '0.85') + ')',
+        opacity: isActive ? 1 : 0.6,
+        zIndex: isActive ? 3 : 1
+      };
+    } else {
+      return {
+        transform: 'translateX(410px) scale(' + (isActive ? '1' : '0.85') + ')',
+        opacity: isActive ? 1 : 0.6,
+        zIndex: isActive ? 3 : 1
+      };
+    }
+  };
+
   const css = `
   .works-carousel {
     width: 100%;
@@ -51,24 +78,7 @@ export default function HowItWorks() {
     height: 450px;
     position: absolute;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .works-carousel .work-slide:nth-child(1) {
-    transform: translateX(-410px) translateZ(-150px) rotateY(40deg);
-    opacity: 0.7;
-    z-index: 1;
-  }
-
-  .works-carousel .work-slide:nth-child(2) {
-    transform: translateX(0) translateZ(0) rotateY(0deg);
-    opacity: 1;
-    z-index: 3;
-  }
-
-  .works-carousel .work-slide:nth-child(3) {
-    transform: translateX(410px) translateZ(-150px) rotateY(-40deg);
-    opacity: 0.7;
-    z-index: 1;
+    cursor: pointer;
   }
 
   .pagination-dot {
@@ -108,13 +118,13 @@ export default function HowItWorks() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+          <h2 className="font-anton text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
             How It{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-lime-500">
+            <span className="font-anton text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-lime-500">
               Works
             </span>
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="font-roboto text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Three simple steps to transform your fitness journey and achieve your goals with expert guidance.
           </p>
         </motion.div>
@@ -135,8 +145,16 @@ export default function HowItWorks() {
             <div className="works-carousel relative">
               {steps.map((step, index) => {
                 const Icon = step.icon;
+                const position = getCardPosition(index);
+                
                 return (
-                  <div key={index} className="work-slide">
+                  <div 
+                    key={index} 
+                    className="work-slide"
+                    style={position}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
                     <div className="relative h-full w-full overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-black shadow-2xl">
                       <div 
                         className="absolute inset-0 bg-cover bg-center"
@@ -191,8 +209,10 @@ export default function HowItWorks() {
           {steps.map((_, index) => (
             <button
               key={index}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                index === 1
+                index === (hoveredIndex !== null ? hoveredIndex : activeIndex)
                   ? 'pagination-dot-active w-8'
                   : 'pagination-dot w-2'
               }`}

@@ -8,6 +8,7 @@ import Testimonials from '../sections/Testimonials';
 import Footer from '../components/Footer';
 import Works from '../sections/Works';
 import AboutUs from '../sections/About';
+import CTASection from '../sections/Cta';
 
 export default function FitFusionHero() {
   return (
@@ -35,6 +36,8 @@ export default function FitFusionHero() {
       
       {/* Testimonials Section */}
       <Testimonials />
+
+      <CTASection />
 
       {/* Footer */}
       <Footer />

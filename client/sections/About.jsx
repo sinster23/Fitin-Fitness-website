@@ -37,8 +37,8 @@ export default function AboutUs() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold mb-8 leading-tight"
           >
-            <span className="text-lime-400">ABOUT</span>{" "}
-            <span className="text-white">US</span>
+            <span className="font-anton text-lime-400">ABOUT</span>{" "}
+            <span className="font-anton text-white">US</span>
           </motion.h1>
 
           {/* Description */}
@@ -48,7 +48,7 @@ export default function AboutUs() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="space-y-4"
           >
-            <p className="text-gray-300 text-lg md:text-xl leading-relaxed">
+            <p className="font-roboto text-gray-300 text-lg md:text-xl leading-relaxed">
               Gym is very important to maintain our health toplas an fugi, sed quia cuuntur magni dolores eos qui rat ne volupra.
             </p>
             

@@ -109,13 +109,7 @@ export default function Testimonials() {
                       {testimonials[activeIndex].location}
                     </p>
                   </div>
-                  
-                  {/* Rating Stars */}
-                  <div className="flex gap-1">
-                    {[...Array(testimonials[activeIndex].rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-lime-400 text-lime-400" />
-                    ))}
-                  </div>
+                
                 </div>
               </div>
             </motion.div>
@@ -187,13 +181,6 @@ export default function Testimonials() {
                       <p className="font-roboto text-gray-400 text-sm">
                         {testimonials[activeIndex].location}
                       </p>
-                    </div>
-                    
-                    {/* Rating Stars */}
-                    <div className="flex gap-1">
-                      {[...Array(testimonials[activeIndex].rating)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 fill-lime-400 text-lime-400" />
-                      ))}
                     </div>
                   </div>
                 </motion.div>

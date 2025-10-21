@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 export default function Categories() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -109,38 +110,24 @@ export default function Categories() {
               </div>
 
               {/* Title */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h4 className="font-bebas text-lime-400 text-3xl md:text-4xl tracking-wide group-hover:text-lime-300 transition-colors duration-300">
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                <h4 className="font-bebas text-lime-400 text-3xl md:text-4xl tracking-wide group-hover:text-white transition-colors duration-300">
                   {category.title}
                 </h4>
               </div>
 
+              {/* Green Overlay - Top Right Corner (30-40% coverage) */}
+              <div className="absolute top-0 right-0 w-2/5 h-2/5 bg-lime-400 rounded-bl-full origin-top-right transform scale-0 group-hover:scale-100 transition-transform duration-500 ease-out z-20 flex items-center justify-center">
+                <span className="font-anton text-black text-xl md:text-2xl tracking-wide text-end px-4">
+                  FIND TRAINER
+                </span>
+              </div>
+
               {/* Hover Glow Effect */}
-              <div className="absolute inset-0 border-2 border-lime-400/0 group-hover:border-lime-400/50 rounded-3xl transition-all duration-300"></div>
+              <div className="absolute inset-0 border-2 border-lime-400/0 group-hover:border-lime-400/50 rounded-3xl transition-all duration-300 z-20"></div>
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Pagination Dots */}
-        {/* <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.8 }}
-          className="flex justify-center gap-2 mt-12"
-        >
-          {categories.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === activeIndex
-                  ? 'bg-lime-400 w-8'
-                  : 'bg-zinc-700 hover:bg-zinc-600'
-              }`}
-            />
-          ))}
-        </motion.div> */}
       </div>
     </div>
   );

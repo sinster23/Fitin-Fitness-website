@@ -67,7 +67,7 @@ export default function Hero() {
             Browse Trainers
           </motion.button>
 
-          <motion.button 
+          {/* <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 text-white border-2 border-white rounded-full hover:bg-white hover:text-black transition-all font-bold text-lg flex items-center justify-center gap-2 w-full sm:w-auto"
@@ -80,7 +80,7 @@ export default function Hero() {
             >
               <ArrowRight />
             </motion.span>
-          </motion.button>
+          </motion.button> */}
         </motion.div>
       </div>
 
